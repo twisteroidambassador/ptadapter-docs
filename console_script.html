@@ -1,0 +1,418 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Console Script Guide &mdash; ptadapter 3.0.0rc1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="ptadapter Developer Guide" href="dev.html" />
+    <link rel="prev" title="Welcome to ptadapter’s documentation!" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ptadapter
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0rc1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Console Script Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#invocation">Invocation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#config-file">Config file</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">ptadapter Developer Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ptadapter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Console Script Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/console_script.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="console-script-guide">
+<h1>Console Script Guide<a class="headerlink" href="#console-script-guide" title="Permalink to this headline">¶</a></h1>
+<p>The console script can be used to build a standalone PT tunnel. Borrowing
+from the illustration in PT specifications:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="o">+------------+</span>                    <span class="o">+-------------------+</span>
+<span class="o">|</span> <span class="n">Client</span> <span class="n">App</span> <span class="o">+--</span> <span class="n">Local</span> <span class="n">Loopback</span> <span class="o">--+</span> <span class="n">ptadapter</span> <span class="n">Client</span>  <span class="o">+--+</span>
+<span class="o">+------------+</span>                    <span class="o">+-------------------+</span>  <span class="o">|</span>
+                                                         <span class="o">|</span>
+    <span class="n">Public</span> <span class="n">Internet</span> <span class="p">(</span><span class="n">Obfuscated</span><span class="o">/</span><span class="n">Transformed</span> <span class="n">traffic</span><span class="p">)</span> <span class="o">==&gt;</span> <span class="o">|</span>
+                                                         <span class="o">|</span>
+<span class="o">+------------+</span>                    <span class="o">+-------------------+</span>  <span class="o">|</span>
+<span class="o">|</span> <span class="n">Server</span> <span class="n">App</span> <span class="o">+--</span> <span class="n">Local</span> <span class="n">Loopback</span> <span class="o">--+</span> <span class="n">ptadapter</span> <span class="n">Server</span>  <span class="o">+--+</span>
+<span class="o">+------------+</span>                    <span class="o">+-------------------+</span>
+</pre></div>
+</div>
+<p>One copy of ptadapter runs on the client host, and one copy runs on the server
+host. The client app connects to the client-side ptadapter, which obfuscates
+traffic and sends it to the server-side ptadapter, which then unobfuscates
+it and forward it to the server app.</p>
+<div class="section" id="invocation">
+<h2>Invocation<a class="headerlink" href="#invocation" title="Permalink to this headline">¶</a></h2>
+<p>If ptadapter is installed via <code class="docutils literal notranslate"><span class="pre">pip</span></code>, simply run it by name:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ptadapter
+</pre></div>
+</div>
+<p>Otherwise, ensure the <code class="docutils literal notranslate"><span class="pre">ptadapter</span></code> directory is in the working directory or
+somewhere else in <code class="docutils literal notranslate"><span class="pre">PYTHONPATH</span></code>, and run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> python -m ptadapter
+</pre></div>
+</div>
+<p>(All examples below will use the first format. Add <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span></code> to the command
+line yourself where appropriate.)</p>
+<p>Running ptadapter without command line arguments will print a brief usage
+message and an error. To see an explanation of the available command line
+arguments, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ptadapter --help
+</pre></div>
+</div>
+<p>In most cases, the command line arguments required are pretty simple.
+To create the server end of an obfuscated tunnel, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ptadapter -S &lt;config-file&gt;
+</pre></div>
+</div>
+<p>And to create the client end, run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> ptadapter -C &lt;config-file&gt;
+</pre></div>
+</div>
+<p>But then, what should the config file look like?</p>
+</div>
+<div class="section" id="config-file">
+<h2>Config file<a class="headerlink" href="#config-file" title="Permalink to this headline">¶</a></h2>
+<p>Config files for ptadapter are written in the familiar INI format. For the
+client side, a <code class="docutils literal notranslate"><span class="pre">[client]</span></code> section is required, while for the server side
+a <code class="docutils literal notranslate"><span class="pre">[server]</span></code> section is required. In these sections, basic configuration
+options about the PT are specified, as well as a list of section names, where
+each of the named section describes a single transport to be used.</p>
+<p>Below is an example config file. Please read the comments before writing
+your own config file, and do not copy the file wholesale.</p>
+<div class="highlight-ini notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is the example configuration file for ptadapter&#39;s console script.</span>
+<span class="c1">#</span>
+<span class="c1"># Lines beginning with &quot;#&quot; are comments.</span>
+<span class="c1">#</span>
+<span class="c1"># Use absolute paths whenever possible.</span>
+<span class="c1"># If a relative path is used in any path config, it will be converted to an</span>
+<span class="c1"># abosolute path relative to the working directory when ptadapter starts.</span>
+<span class="c1">#</span>
+<span class="c1"># Section names are case-insensitive. Do not use the section name &quot;default&quot; or</span>
+<span class="c1"># any case variation thereof.</span>
+<span class="c1">#</span>
+<span class="c1"># It is possible to have separate client and server configuration in the same</span>
+<span class="c1"># config file.</span>
+<span class="c1">#</span>
+<span class="c1"># This file is for demonstration purposes. If two instances of ptadapter</span>
+<span class="c1"># is run using this config file, one as server and one as client, three</span>
+<span class="c1"># separate PT tunnels will be established, between client ends</span>
+<span class="c1"># 127.0.0.1:8000, 127.0.0.1:8001 and 127.0.0.1:8002, and the server end</span>
+<span class="c1"># 127.0.0.1:7000.</span>
+<span class="c1">#</span>
+<span class="c1"># Do not use this file on your actual server! When running an obfs4proxy</span>
+<span class="c1"># server, you do not need to specify server keys in the config file. obfs4proxy</span>
+<span class="c1"># will generate keys and store them in the state directory.</span>
+
+<span class="c1"># ====================</span>
+
+<span class="c1"># Client configuration</span>
+<span class="c1">#</span>
+<span class="c1"># A client configuration file must have a [client] section.</span>
+
+<span class="k">[client]</span>
+
+<span class="na">exec</span> <span class="o">=</span> <span class="s">/usr/bin/obfs4proxy</span>
+<span class="c1"># The Pluggable Transport&#39;s executable. It is also possible to include command</span>
+<span class="c1"># line arguments, like the following:</span>
+<span class="c1"># exec = /usr/bin/obfs4proxy -enableLogging</span>
+
+<span class="na">state</span> <span class="o">=</span> <span class="s">./state</span>
+<span class="c1"># The state directory. Omit this line or specify an empty value to use a</span>
+<span class="c1"># temporary directory, which is cleaned when the PT exits.</span>
+
+<span class="na">tunnels</span> <span class="o">=</span> <span class="s">client_obfs4_1 client_obfs4_2 client_obfs3</span>
+<span class="c1"># Section names describing client transport tunnels, separated by whitespace.</span>
+<span class="c1"># Each specified section must exist.</span>
+
+
+<span class="k">[client_obfs4_1]</span>
+<span class="c1"># This is the config section for a client transport tunnel.</span>
+
+<span class="na">transport</span> <span class="o">=</span> <span class="s">obfs4</span>
+<span class="c1"># Name of the transport for this tunnel. Should be a supported transport method</span>
+<span class="c1"># of the PT.</span>
+
+<span class="na">listen</span> <span class="o">=</span> <span class="s">127.0.0.1:8000</span>
+<span class="c1"># Address and port to listen for unobfuscated client traffic.</span>
+
+<span class="na">upstream</span> <span class="o">=</span> <span class="s">127.0.0.1:7900</span>
+<span class="c1"># Upstream PT address and port to send obfuscated traffic to.</span>
+
+<span class="c1"># If the client transport tunnel requires per-tunnel options, specify them</span>
+<span class="c1"># on separate lines, one line for each option.</span>
+<span class="c1"># The configuration key should be named &quot;options-&lt;option name&gt;&quot;.</span>
+<span class="c1"># The two lines below specify the options &quot;cert&quot; and &quot;iat-mode&quot; respectively.</span>
+
+<span class="na">options-cert</span> <span class="o">=</span> <span class="s">TT5FYRSZBwJVcYJ6EndmG1+fykZDk9dkEEJiCmCIGnLrtH74xaWECstPhY5cACbLLnX9bw</span>
+<span class="na">options-iat-mode</span> <span class="o">=</span> <span class="s">0</span>
+
+<span class="k">[client_obfs4_2]</span>
+<span class="na">transport</span> <span class="o">=</span> <span class="s">obfs4</span>
+<span class="na">listen</span> <span class="o">=</span> <span class="s">127.0.0.1:8001</span>
+<span class="na">upstream</span> <span class="o">=</span> <span class="s">127.0.0.1:7900</span>
+<span class="na">options-cert</span> <span class="o">=</span> <span class="s">TT5FYRSZBwJVcYJ6EndmG1+fykZDk9dkEEJiCmCIGnLrtH74xaWECstPhY5cACbLLnX9bw</span>
+<span class="na">options-iat-mode</span> <span class="o">=</span> <span class="s">0</span>
+
+<span class="k">[client_obfs3]</span>
+<span class="c1"># This is a client transport tunnel section with no additional options.</span>
+<span class="na">transport</span> <span class="o">=</span> <span class="s">obfs3</span>
+<span class="na">listen</span> <span class="o">=</span> <span class="s">127.0.0.1:8002</span>
+<span class="na">upstream</span> <span class="o">=</span> <span class="s">127.0.0.1:7901</span>
+
+
+<span class="c1"># ====================</span>
+
+<span class="c1"># Server configuration</span>
+<span class="c1">#</span>
+<span class="c1"># A server configuration must have a [server] section.</span>
+
+<span class="k">[server]</span>
+
+<span class="na">exec</span> <span class="o">=</span> <span class="s">/usr/bin/obfs4proxy</span>
+<span class="c1"># The Pluggable Transport&#39;s executable. It is also possible to include command</span>
+<span class="c1"># line arguments, like the following:</span>
+<span class="c1"># exec = /usr/bin/obfs4proxy -enableLogging</span>
+
+<span class="na">state</span> <span class="o">=</span> <span class="s">./state</span>
+<span class="c1"># The state directory. Omit this line or specify an empty value to use a</span>
+<span class="c1"># temporary directory, which is cleaned when the PT exits.</span>
+<span class="c1"># For servers, it is recommended to use an actual persistent location for the</span>
+<span class="c1"># state directory, instead of using a temporary directory, since the server</span>
+<span class="c1"># is more likely to store state (like crypto keys, certificates, etc.)</span>
+
+<span class="na">forward</span> <span class="o">=</span> <span class="s">127.0.0.1:7000</span>
+<span class="c1"># Address and port to forward unobfuscated traffic to.</span>
+
+<span class="na">tunnels</span> <span class="o">=</span> <span class="s">server_obfs4 server_obfs3</span>
+<span class="c1"># Section names describing server transports, separated by whitespace.</span>
+<span class="c1"># Each specified section must exist.</span>
+
+
+<span class="k">[server_obfs4]</span>
+<span class="c1"># This is the config section of a server transport.</span>
+
+<span class="na">transport</span> <span class="o">=</span> <span class="s">obfs4</span>
+<span class="c1"># Name of the transport for this tunnel. Should be a supported transport method</span>
+<span class="c1"># of the PT.</span>
+
+<span class="na">listen</span> <span class="o">=</span> <span class="s">127.0.0.1:7900</span>
+<span class="c1"># Address and port to listen for obfuscated client traffic.</span>
+
+<span class="c1"># If the server transport  requires per-transport options, specify them</span>
+<span class="c1"># on separate lines, one line for each option.</span>
+<span class="c1"># The configuration key should be named &quot;options-&lt;option name&gt;&quot;.</span>
+<span class="c1"># The two lines below specify five options,</span>
+<span class="c1"># &quot;node-id&quot;, &quot;private-key&quot;, &quot;public-key&quot;, &quot;drbg-seed&quot; and &quot;iat-mode&quot;</span>
+<span class="c1"># respectively.</span>
+
+<span class="na">options-node-id</span> <span class="o">=</span> <span class="s">4d3e4561149907025571827a1277661b5f9fca46</span>
+<span class="na">options-private-key</span> <span class="o">=</span> <span class="s">7886017adfd178cd139e91250dddee0b2af8ab6cf93f1fe9a7a469d3a13a3067</span>
+<span class="na">options-public-key</span> <span class="o">=</span> <span class="s">4393d7641042620a60881a72ebb47ef8c5a5840acb4f858e5c0026cb2e75fd6f</span>
+<span class="na">options-drbg-seed</span> <span class="o">=</span> <span class="s">c23e876ddc408cc392317e017a6796a96161f76d8dd90522</span>
+<span class="na">options-iat-mode</span> <span class="o">=</span> <span class="s">0</span>
+
+
+<span class="k">[server_obfs3]</span>
+<span class="c1"># This is a server tranposrt config section with no options.</span>
+<span class="na">transport</span> <span class="o">=</span> <span class="s">obfs3</span>
+<span class="na">listen</span> <span class="o">=</span> <span class="s">127.0.0.1:7901</span>
+</pre></div>
+</div>
+<p>To reiterate, do not copy the server and client options in the example config
+file and use it in your own production server!</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="dev.html" class="btn btn-neutral float-right" title="ptadapter Developer Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to ptadapter’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, twisteroid ambassador
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

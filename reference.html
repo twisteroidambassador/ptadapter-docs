@@ -1,0 +1,1022 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API Reference &mdash; ptadapter 3.0.0rc1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="ptadapter Developer Guide" href="dev.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ptadapter
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0rc1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="console_script.html">Console Script Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dev.html">ptadapter Developer Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-ptadapter">The Main <code class="docutils literal notranslate"><span class="pre">ptadapter</span></code> Module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adapters">Adapters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supporting-classes">Supporting Classes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-ptadapter.exceptions"><code class="docutils literal notranslate"><span class="pre">exceptions</span></code> Submodule</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ptadapter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/reference.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<p>Note: these docs use <code class="docutils literal notranslate"><span class="pre">sphinxcontrib_trio</span></code> to autodetect async methods,
+however as of version 1.0.1 it doesn’t correctly mark inherited async methods
+as async; see <a class="reference external" href="https://github.com/python-trio/sphinxcontrib-trio/issues/19">https://github.com/python-trio/sphinxcontrib-trio/issues/19</a> .
+For the class methods documented below, if the text starts with “(async)”, then
+it is an async method and should be awaited, even if the call signature line
+does not show “await”.</p>
+<div class="section" id="module-ptadapter">
+<span id="the-main-ptadapter-module"></span><h2>The Main <code class="docutils literal notranslate"><span class="pre">ptadapter</span></code> Module<a class="headerlink" href="#module-ptadapter" title="Permalink to this headline">¶</a></h2>
+<p>Python interface for Pluggable Transports</p>
+<p>The main module exports the adapter classes, as well as several Named Tuple
+classes used as return values of adapter class methods.</p>
+<div class="section" id="adapters">
+<h3>Adapters<a class="headerlink" href="#adapters" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="ptadapter.ClientAdapter">
+<em class="property">class </em><code class="descclassname">ptadapter.</code><code class="descname">ClientAdapter</code><span class="sig-paren">(</span><em>pt_exec</em>, <em>state</em>, <em>transports</em>, <em>proxy=None</em>, <em>*</em>, <em>exit_on_stdin_close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ClientAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a pluggable transport as client.</p>
+<p>For each enabled transport, the PT will listen on a port, which can be
+looked up using <a class="reference internal" href="#ptadapter.ClientAdapter.get_transport" title="ptadapter.ClientAdapter.get_transport"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_transport()</span></code></a>.
+Use <a class="reference internal" href="#ptadapter.ClientAdapter.open_transport_connection" title="ptadapter.ClientAdapter.open_transport_connection"><code class="xref py py-meth docutils literal notranslate"><span class="pre">open_transport_connection()</span></code></a> to make a connection through a
+transport.</p>
+<p>This object can be used as an async context manager. On entering the
+context, the PT is started, and on exiting the PT is stopped. The adapter
+itself is returned as the “as” variable.</p>
+<dl class="method">
+<dt id="ptadapter.ClientAdapter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>pt_exec</em>, <em>state</em>, <em>transports</em>, <em>proxy=None</em>, <em>*</em>, <em>exit_on_stdin_close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ClientAdapter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the adapter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pt_exec</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>]]) – The pluggable transport command line to execute. This has
+to be a list of str / bytes, since
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.create_subprocess_exec" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">asyncio.create_subprocess_exec()</span></code></a> does not accept an
+entire command line as a string. On non-Windows platforms
+<a class="reference external" href="https://docs.python.org/3/library/shlex.html#shlex.split" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">shlex.split()</span></code></a> can be used to split a command line string
+into a list, while on Windows it’s a bit more complicated.</li>
+<li><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a>]) – The state directory. This is a directory where the PT is
+allowed to store state. Either specify an absolute path (which
+is not required to exist, in which case the PT will create
+the directory), or specify <code class="docutils literal notranslate"><span class="pre">None</span></code> to use a temporary
+directory created using <a class="reference external" href="https://docs.python.org/3/library/tempfile.html#module-tempfile" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tempfile</span></code></a>.</li>
+<li><strong>transports</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – a list of client transports the PT should initialize.
+PTs will ignore names they don’t recognize.</li>
+<li><strong>proxy</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]) – The upstream proxy to use. Must be specified in the URI
+format:
+<code class="docutils literal notranslate"><span class="pre">&lt;proxy_type&gt;://[&lt;user_name&gt;[:&lt;password&gt;][&#64;]&lt;ip&gt;:&lt;port&gt;</span></code>.</li>
+<li><strong>exit_on_stdin_close</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether closing the PT’s STDIN indicates the
+PT should gracefully exit.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ClientAdapter.get_transport">
+<code class="descname">get_transport</code><span class="sig-paren">(</span><em>transport</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ClientAdapter.get_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up initialized client transport methods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>transport</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the transport.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClientTransport</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A <a class="reference internal" href="#ptadapter.ClientTransport" title="ptadapter.ClientTransport"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClientTransport</span></code></a> NamedTuple for the specified transport.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> – If the specified transport was not provided when calling
+<a class="reference internal" href="#ptadapter.ClientAdapter.__init__" title="ptadapter.ClientAdapter.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/asyncio-exceptions.html#asyncio.InvalidStateError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">asyncio.InvalidStateError</span></code></a> – If PT has not yet started, or if the
+transport is not yet initialized.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> – If the PT returned an error while initializing the
+specified transport.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ClientAdapter.open_transport_connection">
+<em class="property">await </em><code class="descname">open_transport_connection</code><span class="sig-paren">(</span><em>transport</em>, <em>host</em>, <em>port</em>, <em>args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ClientAdapter.open_transport_connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Open a connection through a client transport.</p>
+<p>This method uses <a class="reference internal" href="#ptadapter.ClientAdapter.get_transport" title="ptadapter.ClientAdapter.get_transport"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_transport()</span></code></a> and
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.open_connection" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">asyncio.open_connection()</span></code></a>, and their exceptions will not be
+modified. Additional possible exceptions are listed below.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>transport</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the transport.</li>
+<li><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv6Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a>]) – Destination IP address or host name. Depending on the PT,
+host names or IPv6 addresses may not be supported.</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Destination port number.</li>
+<li><strong>args</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – Per-connection arguments. Both keys and values should be
+strings. (Backslash, equal signs and semicolons will be
+automatically escaped before passing to PT.)</li>
+<li><strong>kwargs</strong> – Any unrecognized keyword arguments are passed to
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">asyncio.open_connection()</span></code>. This can be useful for
+specifying <em>limit</em> and <em>local_addr</em>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">Tuple</span></code>[<code class="xref py py-class docutils literal notranslate"><span class="pre">StreamReader</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">StreamWriter</span></code>]</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A (<a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.StreamReader" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamReader</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.StreamWriter" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamWriter</span></code></a>)
+tuple.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> – If the PT violates PT-spec or SOCKS proxy protocols.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – If <em>host</em>, <em>port</em> or <em>args</em> are invalid.</li>
+<li><a class="reference internal" href="#ptadapter.exceptions.PTConnectError" title="ptadapter.exceptions.PTConnectError"><code class="xref py py-exc docutils literal notranslate"><span class="pre">exceptions.PTConnectError</span></code></a> – If the PT reports an error while
+connecting to the destination.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ClientAdapter.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ClientAdapter.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Start the PT executable and wait until it’s ready.</p>
+<p>“Ready” means that all transports have finished initializing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ClientAdapter.state">
+<code class="descname">state</code><a class="headerlink" href="#ptadapter.ClientAdapter.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>The state directory.</p>
+<p>If a temporary directory is used, this will be <code class="docutils literal notranslate"><span class="pre">None</span></code> before the
+adapter starts, and will be the actual path of the directory after
+the adapter has started. The temporary directory will be deleted
+once the adapter is stopped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ClientAdapter.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ClientAdapter.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Stop the PT executable.</p>
+<p>First try to signal a graceful exit by closing PT’s STDIN (if
+enabled) and wait, then call
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.asyncio.subprocess.Process.terminate" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">terminate()</span></code></a> and wait,
+then call
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.asyncio.subprocess.Process.kill" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">kill()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ClientAdapter.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ClientAdapter.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Block until the PT process exit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ptadapter.ServerAdapter">
+<em class="property">class </em><code class="descclassname">ptadapter.</code><code class="descname">ServerAdapter</code><span class="sig-paren">(</span><em>pt_exec</em>, <em>state</em>, <em>forward_host</em>, <em>forward_port</em>, <em>*</em>, <em>exit_on_stdin_close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a pluggable transport as server.</p>
+<p>For each enabled transport, the PT will listen on a port, which can be
+either specified or left auto-assigned, and looked up using
+<a class="reference internal" href="#ptadapter.ServerAdapter.get_transport" title="ptadapter.ServerAdapter.get_transport"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_transport()</span></code></a>. The PT will forward unobfuscated traffic directly
+to <em>forward_host</em>:<em>forward_port</em>.</p>
+<p>This object can be used as an async context manager. On entering the
+context, the PT is started, and on exiting the PT is stopped. The adapter
+itself is returned as the “as” variable.</p>
+<dl class="method">
+<dt id="ptadapter.ServerAdapter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>pt_exec</em>, <em>state</em>, <em>forward_host</em>, <em>forward_port</em>, <em>*</em>, <em>exit_on_stdin_close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerAdapter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the adapter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pt_exec</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>]]) – The pluggable transport command line to execute. This has
+to be a list of str / bytes, since
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.create_subprocess_exec" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">asyncio.create_subprocess_exec()</span></code></a> does not accept an
+entire command line as a string. On non-Windows platforms
+<a class="reference external" href="https://docs.python.org/3/library/shlex.html#shlex.split" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">shlex.split()</span></code></a> can be used to split a command line string
+into a list, while on Windows it’s a bit more complicated.</li>
+<li><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a>]) – The state directory. This is a directory where the PT is
+allowed to store state. Either specify a path (which
+is not required to exist, in which case the PT will create
+the directory), or specify <code class="docutils literal notranslate"><span class="pre">None</span></code> to use a temporary
+directory created using <a class="reference external" href="https://docs.python.org/3/library/tempfile.html#module-tempfile" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tempfile</span></code></a>. For servers, using
+an actual persistent location is recommended.</li>
+<li><strong>forward_host</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv6Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a>]) – IP address or host name to forward unobfuscated
+traffic to.</li>
+<li><strong>forward_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Port number to forward unobfuscated traffic to.</li>
+<li><strong>exit_on_stdin_close</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether closing the PT’s STDIN indicates the
+PT should gracefully exit.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ServerAdapter.add_transport">
+<code class="descname">add_transport</code><span class="sig-paren">(</span><em>transport</em>, <em>host</em>, <em>port</em>, <em>options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerAdapter.add_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a server transport.</p>
+<p>This can only be called before PT starts. Unlike when running as
+client, PTs only support one tunnel per transport when running as
+server. Calling this with the same <em>transport</em> again will overwrite
+the previous entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>transport</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The transport name. PT will ignore names it does not
+recognize.</li>
+<li><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv6Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a>]) – The IP address to listen on. This must not be a host name.
+<em>host</em> and <em>port</em> must be either specified at the same time,
+or set to <code class="docutils literal notranslate"><span class="pre">None</span></code> at the same time.</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The port number to listen on.</li>
+<li><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – Transport options.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ServerAdapter.get_transport">
+<code class="descname">get_transport</code><span class="sig-paren">(</span><em>transport</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerAdapter.get_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up initialized server transport methods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>transport</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the transport.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerTransport</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A <a class="reference internal" href="#ptadapter.ServerTransport" title="ptadapter.ServerTransport"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerTransport</span></code></a> NamedTuple for the specified transport.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> – If the specified transport was not provided when calling
+<a class="reference internal" href="#ptadapter.ServerAdapter.__init__" title="ptadapter.ServerAdapter.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/asyncio-exceptions.html#asyncio.InvalidStateError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">asyncio.InvalidStateError</span></code></a> – If PT has not yet started, or if the
+transport is not yet initialized.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> – If the PT returned an error while initializing the
+specified transport.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ServerAdapter.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerAdapter.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Start the PT executable and wait until it’s ready.</p>
+<p>“Ready” means that all transports have finished initializing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ServerAdapter.state">
+<code class="descname">state</code><a class="headerlink" href="#ptadapter.ServerAdapter.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>The state directory.</p>
+<p>If a temporary directory is used, this will be <code class="docutils literal notranslate"><span class="pre">None</span></code> before the
+adapter starts, and will be the actual path of the directory after
+the adapter has started. The temporary directory will be deleted
+once the adapter is stopped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ServerAdapter.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerAdapter.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Stop the PT executable.</p>
+<p>First try to signal a graceful exit by closing PT’s STDIN (if
+enabled) and wait, then call
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.asyncio.subprocess.Process.terminate" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">terminate()</span></code></a> and wait,
+then call
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.asyncio.subprocess.Process.kill" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">kill()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ServerAdapter.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerAdapter.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Block until the PT process exit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ptadapter.ExtServerAdapter">
+<em class="property">class </em><code class="descclassname">ptadapter.</code><code class="descname">ExtServerAdapter</code><span class="sig-paren">(</span><em>pt_exec</em>, <em>state</em>, <em>client_connected_cb</em>, <em>*</em>, <em>preconnect_cb=None</em>, <em>auth_cookie_file=None</em>, <em>ext_host='localhost'</em>, <em>ext_port=0</em>, <em>ext_family=&lt;AddressFamily.AF_UNSPEC: 0&gt;</em>, <em>exit_on_stdin_close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ExtServerAdapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run a pluggable transport as server.</p>
+<p>For each enabled transport, the PT will listen on a port, which can be
+either specified or left auto-assigned, and looked up using
+<a class="reference internal" href="#ptadapter.ExtServerAdapter.get_transport" title="ptadapter.ExtServerAdapter.get_transport"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_transport()</span></code></a>. The PT will connect to the adapter using the
+ExtOrPort protocol, and a callback will be invoked.</p>
+<p>This object can be used as an async context manager. On entering the
+context, the PT is started, and on exiting the PT is stopped. The adapter
+itself is returned as the “as” variable.</p>
+<dl class="method">
+<dt id="ptadapter.ExtServerAdapter.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>pt_exec</em>, <em>state</em>, <em>client_connected_cb</em>, <em>*</em>, <em>preconnect_cb=None</em>, <em>auth_cookie_file=None</em>, <em>ext_host='localhost'</em>, <em>ext_port=0</em>, <em>ext_family=&lt;AddressFamily.AF_UNSPEC: 0&gt;</em>, <em>exit_on_stdin_close=True</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ExtServerAdapter.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the adapter.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pt_exec</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.List" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">List</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>]]) – The pluggable transport command line to execute. This has
+to be a list of str / bytes, since
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.create_subprocess_exec" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">asyncio.create_subprocess_exec()</span></code></a> does not accept an
+entire command line as a string. On non-Windows platforms
+<a class="reference external" href="https://docs.python.org/3/library/shlex.html#shlex.split" title="(in Python v3.7)"><code class="xref py py-func docutils literal notranslate"><span class="pre">shlex.split()</span></code></a> can be used to split a command line string
+into a list, while on Windows it’s a bit more complicated.</li>
+<li><strong>state</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a>]) – The state directory. This is a directory where the PT is
+allowed to store state. Either specify a path (which
+is not required to exist, in which case the PT will create
+the directory), or specify <code class="docutils literal notranslate"><span class="pre">None</span></code> to use a temporary
+directory created using <a class="reference external" href="https://docs.python.org/3/library/tempfile.html#module-tempfile" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tempfile</span></code></a>. For servers, using
+an actual persistent location is recommended.</li>
+<li><strong>client_connected_cb</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">StreamReader</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">StreamWriter</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">ExtOrPortClientConnection</span></code>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<code class="docutils literal notranslate"><span class="pre">None</span></code>]]) – Async callback function called to handle
+incoming client connections. It will be called with three
+arguments: <em>(reader, writer, connection_info)</em>, where
+<em>reader</em> and <em>writer</em> are a <a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.StreamReader" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamReader</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.StreamWriter" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamWriter</span></code></a> pair,
+and <em>connection_info</em> is a <a class="reference internal" href="#ptadapter.ExtOrPortClientConnection" title="ptadapter.ExtOrPortClientConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtOrPortClientConnection</span></code></a>
+containing information on the connecting client.</li>
+<li><strong>preconnect_cb</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>[[<code class="xref py py-class docutils literal notranslate"><span class="pre">ExtOrPortClientConnection</span></code>], <a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Awaitable" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Awaitable</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>]]]) – Optional async callback function called before
+<em>client_connect_cb</em>, where an incoming connection can be
+rejected. It will be called with a single argument of
+<a class="reference internal" href="#ptadapter.ExtOrPortClientConnection" title="ptadapter.ExtOrPortClientConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtOrPortClientConnection</span></code></a> containing information on
+the connecting client, and should return a boolean, where
+<code class="docutils literal notranslate"><span class="pre">True</span></code> means to allow the connection and <code class="docutils literal notranslate"><span class="pre">False</span></code> means
+to reject.</li>
+<li><strong>auth_cookie_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#bytes" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bytes</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/os.html#os.PathLike" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">PathLike</span></code></a>, <code class="docutils literal notranslate"><span class="pre">None</span></code>]) – Path to the ExtOrPort authentication cookie file.
+If specified, this should be a path + filename to a
+writable location that is not readable by other users. If
+unspecified, a temporary directory is created using
+<a class="reference external" href="https://docs.python.org/3/library/tempfile.html#module-tempfile" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tempfile</span></code></a>, and the cookie file created inside.</li>
+<li><strong>ext_host</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – IP address / host name to bind ExtOrPort to. The ExtOrPort
+is used internally between the PT and the adapter, so this
+should be a loopback address.</li>
+<li><strong>ext_port</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – Port number to bind ExtOrPort to. <code class="docutils literal notranslate"><span class="pre">0</span></code> means a random
+ephemeral port.</li>
+<li><strong>ext_family</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – The <code class="docutils literal notranslate"><span class="pre">family</span></code> flag passed while binding ExtOrPort.
+<a class="reference external" href="https://docs.python.org/3/library/socket.html#socket.AF_INET" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">socket.AF_INET</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/socket.html#socket.AF_INET6" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">socket.AF_INET6</span></code></a>
+can be passed to restrict ExtOrPort to IPv4 or IPv6
+respectively.</li>
+<li><strong>exit_on_stdin_close</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a>) – Whether closing the PT’s STDIN indicates the
+PT should gracefully exit.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ExtServerAdapter.add_transport">
+<code class="descname">add_transport</code><span class="sig-paren">(</span><em>transport</em>, <em>host</em>, <em>port</em>, <em>options=None</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ExtServerAdapter.add_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a server transport.</p>
+<p>This can only be called before PT starts. Unlike when running as
+client, PTs only support one tunnel per transport when running as
+server. Calling this with the same <em>transport</em> again will overwrite
+the previous entry.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>transport</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – The transport name. PT will ignore names it does not
+recognize.</li>
+<li><strong>host</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Union" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Union</span></code></a>[<code class="docutils literal notranslate"><span class="pre">None</span></code>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv4Address</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv6Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">IPv6Address</span></code></a>]) – The IP address to listen on. This must not be a host name.
+<em>host</em> and <em>port</em> must be either specified at the same time,
+or set to <code class="docutils literal notranslate"><span class="pre">None</span></code> at the same time.</li>
+<li><strong>port</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]) – The port number to listen on.</li>
+<li><strong>options</strong> (<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]]) – Transport options.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><code class="docutils literal notranslate"><span class="pre">None</span></code></p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ExtServerAdapter.get_transport">
+<code class="descname">get_transport</code><span class="sig-paren">(</span><em>transport</em><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ExtServerAdapter.get_transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up initialized server transport methods.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><p class="first"><strong>transport</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – Name of the transport.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerTransport</span></code></p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A <a class="reference internal" href="#ptadapter.ServerTransport" title="ptadapter.ServerTransport"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerTransport</span></code></a> NamedTuple for the specified transport.</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#KeyError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">KeyError</span></code></a> – If the specified transport was not provided when calling
+<a class="reference internal" href="#ptadapter.ExtServerAdapter.__init__" title="ptadapter.ExtServerAdapter.__init__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__init__()</span></code></a>.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/asyncio-exceptions.html#asyncio.InvalidStateError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">asyncio.InvalidStateError</span></code></a> – If PT has not yet started, or if the
+transport is not yet initialized.</li>
+<li><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#RuntimeError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">RuntimeError</span></code></a> – If the PT returned an error while initializing the
+specified transport.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ExtServerAdapter.start">
+<code class="descname">start</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ExtServerAdapter.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Start the PT executable and wait until it’s ready.</p>
+<p>“Ready” means that all transports have finished initializing.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ExtServerAdapter.state">
+<code class="descname">state</code><a class="headerlink" href="#ptadapter.ExtServerAdapter.state" title="Permalink to this definition">¶</a></dt>
+<dd><p>The state directory.</p>
+<p>If a temporary directory is used, this will be <code class="docutils literal notranslate"><span class="pre">None</span></code> before the
+adapter starts, and will be the actual path of the directory after
+the adapter has started. The temporary directory will be deleted
+once the adapter is stopped.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.7)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ExtServerAdapter.stop">
+<code class="descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ExtServerAdapter.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Stop the PT executable.</p>
+<p>First try to signal a graceful exit by closing PT’s STDIN (if
+enabled) and wait, then call
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.asyncio.subprocess.Process.terminate" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">terminate()</span></code></a> and wait,
+then call
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-subprocess.html#asyncio.asyncio.subprocess.Process.kill" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">kill()</span></code></a>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ExtServerAdapter.wait">
+<code class="descname">wait</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ExtServerAdapter.wait" title="Permalink to this definition">¶</a></dt>
+<dd><p>(async) Block until the PT process exit.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><code class="docutils literal notranslate"><span class="pre">None</span></code></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="supporting-classes">
+<h3>Supporting Classes<a class="headerlink" href="#supporting-classes" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="ptadapter.ClientTransport">
+<em class="property">class </em><code class="descclassname">ptadapter.</code><code class="descname">ClientTransport</code><a class="headerlink" href="#ptadapter.ClientTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a> describing an initialized client
+transport method.</p>
+<dl class="attribute">
+<dt id="ptadapter.ClientTransport.scheme">
+<code class="descname">scheme</code><a class="headerlink" href="#ptadapter.ClientTransport.scheme" title="Permalink to this definition">¶</a></dt>
+<dd><p>The proxy scheme, either “socks4” or “socks5”.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ClientTransport.host">
+<code class="descname">host</code><a class="headerlink" href="#ptadapter.ClientTransport.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy IP address.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ClientTransport.port">
+<code class="descname">port</code><a class="headerlink" href="#ptadapter.ClientTransport.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Proxy port.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ptadapter.ServerTransport">
+<em class="property">class </em><code class="descclassname">ptadapter.</code><code class="descname">ServerTransport</code><a class="headerlink" href="#ptadapter.ServerTransport" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a> describing an initialized server transport
+method.</p>
+<dl class="attribute">
+<dt id="ptadapter.ServerTransport.host">
+<code class="descname">host</code><a class="headerlink" href="#ptadapter.ServerTransport.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse proxy IP address.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ServerTransport.port">
+<code class="descname">port</code><a class="headerlink" href="#ptadapter.ServerTransport.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reverse proxy port.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ServerTransport.options">
+<code class="descname">options</code><a class="headerlink" href="#ptadapter.ServerTransport.options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Per-transport option field returned by PT.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="ptadapter.ServerTransport.parse_args">
+<code class="descname">parse_args</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#ptadapter.ServerTransport.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the “ARGS” option in the <em>options</em> field into a dict.</p>
+<p>If the options field is not present, or it does not contain an “ARGS”
+option, return an empty dict.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raises:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.7)"><code class="xref py py-exc docutils literal notranslate"><span class="pre">ValueError</span></code></a> – if the “ARGS” option is not well-formed.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dict</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ptadapter.ExtOrPortClientConnection">
+<em class="property">class </em><code class="descclassname">ptadapter.</code><code class="descname">ExtOrPortClientConnection</code><a class="headerlink" href="#ptadapter.ExtOrPortClientConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.NamedTuple" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">NamedTuple</span></code></a> describing an incoming client connection.</p>
+<p>In practice, PTs should provide all the information represented here, but
+the ExtOrPort specs does not explicitly require PT to provide everything,
+so there still might be cases where some of the entries are <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+<dl class="attribute">
+<dt id="ptadapter.ExtOrPortClientConnection.transport">
+<code class="descname">transport</code><a class="headerlink" href="#ptadapter.ExtOrPortClientConnection.transport" title="Permalink to this definition">¶</a></dt>
+<dd><p>Name of transport used by the client.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ExtOrPortClientConnection.host">
+<code class="descname">host</code><a class="headerlink" href="#ptadapter.ExtOrPortClientConnection.host" title="Permalink to this definition">¶</a></dt>
+<dd><p>IP address of the client.</p>
+<p>Note: this is not a string, but an instance of either
+<a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipaddress.IPv4Address</span></code></a> or <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv6Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipaddress.IPv6Address</span></code></a>.
+Call <code class="xref py py-func docutils literal notranslate"><span class="pre">str()</span></code> on it if you need a string.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.ExtOrPortClientConnection.port">
+<code class="descname">port</code><a class="headerlink" href="#ptadapter.ExtOrPortClientConnection.port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Port number of the client.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="module-ptadapter.exceptions">
+<span id="exceptions-submodule"></span><h2><code class="docutils literal notranslate"><span class="pre">exceptions</span></code> Submodule<a class="headerlink" href="#module-ptadapter.exceptions" title="Permalink to this headline">¶</a></h2>
+<p>Exceptions raised by this package.</p>
+<p>Two Enums used in these exceptions are also imported in this module for
+convenience.</p>
+<dl class="exception">
+<dt id="ptadapter.exceptions.PTConnectError">
+<em class="property">exception </em><code class="descclassname">ptadapter.exceptions.</code><code class="descname">PTConnectError</code><a class="headerlink" href="#ptadapter.exceptions.PTConnectError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ConnectionError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a></p>
+<p>Error while PT tries to connect to destination.</p>
+<p>This is the base class of some other connection errors.
+To make catching connectivity-related exceptions easier, this inherits
+from the built-in <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ConnectionError" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ConnectionError</span></code></a>.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ptadapter.exceptions.PTSOCKS5ConnectError">
+<em class="property">exception </em><code class="descclassname">ptadapter.exceptions.</code><code class="descname">PTSOCKS5ConnectError</code><a class="headerlink" href="#ptadapter.exceptions.PTSOCKS5ConnectError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ptadapter.exceptions.PTConnectError" title="ptadapter.exceptions.PTConnectError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.exceptions.PTConnectError</span></code></a></p>
+<p>Error reported by client PT using SOCKS5 connecting to destination.</p>
+<p>The <em>args</em> of this exception contains the reason of failure returned
+by the PT, as an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.socks.SOCKS5Reply</span></code>.
+This may or may not be useful; do not be surprised if PTs only ever
+return GENERAL_FAILURE.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="ptadapter.exceptions.PTSOCKS4ConnectError">
+<em class="property">exception </em><code class="descclassname">ptadapter.exceptions.</code><code class="descname">PTSOCKS4ConnectError</code><a class="headerlink" href="#ptadapter.exceptions.PTSOCKS4ConnectError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#ptadapter.exceptions.PTConnectError" title="ptadapter.exceptions.PTConnectError"><code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.exceptions.PTConnectError</span></code></a></p>
+<p>Error reported by client PT using SOCKS4 connecting to destination.</p>
+<p>The <em>args</em> of this exception contains the reason of failure returned
+by the PT, as an instance of <code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.socks.SOCKS4Reply</span></code>.
+This is likely to be even less useful than a SOCKS5 reply, since the
+specific errors are all related to <code class="docutils literal notranslate"><span class="pre">identd</span></code>, which we are not using.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="ptadapter.exceptions.SOCKS5Reply">
+<em class="property">class </em><code class="descclassname">ptadapter.exceptions.</code><code class="descname">SOCKS5Reply</code><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.enums.BytesEnum</span></code></p>
+<p>Command reply from SOCKS5 server to client.</p>
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.SUCCESS">
+<code class="descname">SUCCESS</code><em class="property"> = b'\x00'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.SUCCESS" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.GENERAL_FAILURE">
+<code class="descname">GENERAL_FAILURE</code><em class="property"> = b'\x01'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.GENERAL_FAILURE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.CONNECTION_NOT_ALLOWED_BY_RULESET">
+<code class="descname">CONNECTION_NOT_ALLOWED_BY_RULESET</code><em class="property"> = b'\x02'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.CONNECTION_NOT_ALLOWED_BY_RULESET" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.NETWORK_UNREACHABLE">
+<code class="descname">NETWORK_UNREACHABLE</code><em class="property"> = b'\x03'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.NETWORK_UNREACHABLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.HOST_UNREACHABLE">
+<code class="descname">HOST_UNREACHABLE</code><em class="property"> = b'\x04'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.HOST_UNREACHABLE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.CONNECTION_REFUSED">
+<code class="descname">CONNECTION_REFUSED</code><em class="property"> = b'\x05'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.CONNECTION_REFUSED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.TTL_EXPIRED">
+<code class="descname">TTL_EXPIRED</code><em class="property"> = b'\x06'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.TTL_EXPIRED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.COMMAND_NOT_SUPPORTED">
+<code class="descname">COMMAND_NOT_SUPPORTED</code><em class="property"> = b'\x07'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.COMMAND_NOT_SUPPORTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS5Reply.ADDRESS_TYPE_NOT_SUPPORTED">
+<code class="descname">ADDRESS_TYPE_NOT_SUPPORTED</code><em class="property"> = b'\x08'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS5Reply.ADDRESS_TYPE_NOT_SUPPORTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="ptadapter.exceptions.SOCKS4Reply">
+<em class="property">class </em><code class="descclassname">ptadapter.exceptions.</code><code class="descname">SOCKS4Reply</code><a class="headerlink" href="#ptadapter.exceptions.SOCKS4Reply" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.enums.BytesEnum</span></code></p>
+<p>Command reply from SOCKS4 server to client.</p>
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS4Reply.GRANTED">
+<code class="descname">GRANTED</code><em class="property"> = b'Z'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS4Reply.GRANTED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS4Reply.REJECTED_OR_FAILED">
+<code class="descname">REJECTED_OR_FAILED</code><em class="property"> = b'['</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS4Reply.REJECTED_OR_FAILED" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS4Reply.NO_IDENTD">
+<code class="descname">NO_IDENTD</code><em class="property"> = b'\\'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS4Reply.NO_IDENTD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="ptadapter.exceptions.SOCKS4Reply.USER_ID_MISMATCH">
+<code class="descname">USER_ID_MISMATCH</code><em class="property"> = b']'</em><a class="headerlink" href="#ptadapter.exceptions.SOCKS4Reply.USER_ID_MISMATCH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="dev.html" class="btn btn-neutral" title="ptadapter Developer Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, twisteroid ambassador
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

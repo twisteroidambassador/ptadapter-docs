@@ -1,0 +1,341 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>ptadapter Developer Guide &mdash; ptadapter 3.0.0rc1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="reference.html" />
+    <link rel="prev" title="Console Script Guide" href="console_script.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> ptadapter
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                3.0.0rc1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="console_script.html">Console Script Guide</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">ptadapter Developer Guide</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#common-aspects">Common aspects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pt-client">PT Client</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pt-server">PT Server</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">ptadapter</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>ptadapter Developer Guide</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/dev.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="ptadapter-developer-guide">
+<h1>ptadapter Developer Guide<a class="headerlink" href="#ptadapter-developer-guide" title="Permalink to this headline">¶</a></h1>
+<p>The ptadapter module provides several classes to interface with Pluggable
+Transports.
+<a class="reference internal" href="reference.html#ptadapter.ClientAdapter" title="ptadapter.ClientAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClientAdapter</span></code></a> controls a PT client, and can be used to
+initiate an obfuscated connection towards a PT server;
+<a class="reference internal" href="reference.html#ptadapter.ServerAdapter" title="ptadapter.ServerAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerAdapter</span></code></a> and <a class="reference internal" href="reference.html#ptadapter.ExtServerAdapter" title="ptadapter.ExtServerAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtServerAdapter</span></code></a>
+controls a PT server, and can be used to receive obfuscated
+connection from a PT client.</p>
+<div class="section" id="common-aspects">
+<h2>Common aspects<a class="headerlink" href="#common-aspects" title="Permalink to this headline">¶</a></h2>
+<p>There are several common arguments when initializing any of the <code class="docutils literal notranslate"><span class="pre">*Adapter</span></code>
+classes:</p>
+<ul class="simple">
+<li><code class="docutils literal notranslate"><span class="pre">pt_exec</span></code> is the command line of the PT executable, optionally including
+arguments. This must be a List of <code class="docutils literal notranslate"><span class="pre">str</span></code> or <code class="docutils literal notranslate"><span class="pre">bytes</span></code>, where the first
+element is the path + filename of the executable, and each subsequent element
+is a command line argument. This is the same style as used by the
+<a class="reference external" href="https://docs.python.org/3/library/subprocess.html#module-subprocess" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">subprocess</span></code></a> module.</li>
+<li><code class="docutils literal notranslate"><span class="pre">state</span></code> is the path of the PT’s state directory. The PT specification
+requires that if the PT saves data, it must be saved in the state directory.
+A location writable by the PT should be specified; if it does not
+exist, the PT will try to create it. Alternatively, <code class="docutils literal notranslate"><span class="pre">None</span></code> can be specified,
+in which case a temporary directory will be created as the state directory
+before starting the PT, and deleted once the PT exits.</li>
+<li><code class="docutils literal notranslate"><span class="pre">exit_on_stdin_close</span></code> can usually be left unspecified.</li>
+</ul>
+<p>Instances of the <code class="docutils literal notranslate"><span class="pre">*Adapter</span></code> classes can be used as async context managers,
+like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">async</span> <span class="k">with</span> <span class="n">ptadapter</span><span class="o">.</span><span class="n">ClientAdapter</span><span class="p">(</span><span class="o">...</span><span class="p">)</span> <span class="k">as</span> <span class="n">adapter</span><span class="p">:</span>
+    <span class="c1"># The PT is automatically started</span>
+
+    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">adapter</span><span class="o">.</span><span class="n">open_transport_connection</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+    <span class="c1"># ... use the adapter, etc.</span>
+
+<span class="c1"># once exiting the `async with` block, the PT is stopped</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pt-client">
+<h2>PT Client<a class="headerlink" href="#pt-client" title="Permalink to this headline">¶</a></h2>
+<p>When initializing a <a class="reference internal" href="reference.html#ptadapter.ClientAdapter" title="ptadapter.ClientAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ClientAdapter</span></code></a>,
+a list of transport method names are required,
+but not individual upstream destinations or per-connection arguments.
+These arguments are specified when making a connection.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># It&#39;s possible to add command line arguments</span>
+<span class="n">pt_exec</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/usr/bin/obfs4proxy&#39;</span><span class="p">,</span> <span class="s1">&#39;-enableLogging&#39;</span><span class="p">]</span>
+<span class="n">state</span> <span class="o">=</span> <span class="s1">&#39;/var/run/obfs4-state&#39;</span>
+<span class="n">transports</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;obfs4&#39;</span><span class="p">,</span> <span class="s1">&#39;obfs3&#39;</span><span class="p">]</span>
+<span class="c1"># An optional upstream proxy server can be specified</span>
+<span class="n">proxy</span> <span class="o">=</span> <span class="s1">&#39;socks5://127.0.0.1:1080&#39;</span>
+
+<span class="k">async</span> <span class="k">with</span> <span class="n">ptadapter</span><span class="o">.</span><span class="n">ClientAdapter</span><span class="p">(</span><span class="n">pt_exec</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">transports</span><span class="p">,</span> <span class="n">proxy</span><span class="o">=</span><span class="n">proxy</span><span class="p">)</span> <span class="k">as</span> <span class="n">adapter</span><span class="p">:</span>
+    <span class="c1"># connect to an upstream</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;cert&#39;</span><span class="p">:</span> <span class="s1">&#39;...&#39;</span><span class="p">}</span>
+    <span class="n">reader</span><span class="p">,</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">await</span> <span class="n">adapter</span><span class="o">.</span><span class="n">open_transport_connection</span><span class="p">(</span><span class="s1">&#39;obfs4&#39;</span><span class="p">,</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">7900</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+    <span class="c1"># use reader and writer as usual</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="pt-server">
+<h2>PT Server<a class="headerlink" href="#pt-server" title="Permalink to this headline">¶</a></h2>
+<p>There are two classes providing PT server functionality:
+<a class="reference internal" href="reference.html#ptadapter.ServerAdapter" title="ptadapter.ServerAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerAdapter</span></code></a> and <a class="reference internal" href="reference.html#ptadapter.ExtServerAdapter" title="ptadapter.ExtServerAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtServerAdapter</span></code></a>.</p>
+<p>With <a class="reference internal" href="reference.html#ptadapter.ServerAdapter" title="ptadapter.ServerAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ServerAdapter</span></code></a>, when each obfuscated connection is
+received, an unobfuscated connection is made to a TCP address:port specified
+by you. This is mostly useful for forwarding unobfuscated traffic to something
+else, although if you would like to receive the connections, you could simply
+listen on a port and direct unobfuscated traffic there.</p>
+<p>With <a class="reference internal" href="reference.html#ptadapter.ExtServerAdapter" title="ptadapter.ExtServerAdapter"><code class="xref py py-class docutils literal notranslate"><span class="pre">ExtServerAdapter</span></code></a>, when each obfuscated connection is
+received, an async callback function is called where you
+can handle the incoming connection. There is also a “pre-connect callback”,
+where you are provided with client info and can deny the connection quickly.
+This class is more useful when you want to handle incoming connections.</p>
+<p>The main callback function is called with 3 arguments:
+a <a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.StreamReader" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamReader</span></code></a>, a <a class="reference external" href="https://docs.python.org/3/library/asyncio-stream.html#asyncio.StreamWriter" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">StreamWriter</span></code></a>, and a
+<a class="reference internal" href="reference.html#ptadapter.ExtOrPortClientConnection" title="ptadapter.ExtOrPortClientConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.ExtOrPortClientConnection</span></code></a> Named Tuple containing information
+about the connecting client.</p>
+<p>The pre-connect callback is called with a single argument, a
+<a class="reference internal" href="reference.html#ptadapter.ExtOrPortClientConnection" title="ptadapter.ExtOrPortClientConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.ExtOrPortClientConnection</span></code></a>, and should return a boolean value.
+If <code class="docutils literal notranslate"><span class="pre">False</span></code> is returned, then this connection will be terminated, and the
+main callback will not be called.</p>
+<p>In both these callbacks, the provided
+<a class="reference internal" href="reference.html#ptadapter.ExtOrPortClientConnection" title="ptadapter.ExtOrPortClientConnection"><code class="xref py py-class docutils literal notranslate"><span class="pre">ptadapter.ExtOrPortClientConnection</span></code></a> Named Tuple has 3 elements:</p>
+<ul class="simple">
+<li><em>transport</em> is the name of the transport method the client is connecting
+through;</li>
+<li><em>host</em> is an instance of <a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv4Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipaddress.IPv4Address</span></code></a> or
+<a class="reference external" href="https://docs.python.org/3/library/ipaddress.html#ipaddress.IPv6Address" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ipaddress.IPv6Address</span></code></a> containing the peer address of the client;</li>
+<li><em>port</em> is the peer address port number of the client.</li>
+</ul>
+<p>As an example, to write a server that only allows connection from localhost:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pt_exec</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/usr/bin/obfs4proxy&#39;</span><span class="p">,</span> <span class="s1">&#39;-enableLogging&#39;</span><span class="p">]</span>
+<span class="n">state</span> <span class="o">=</span> <span class="s1">&#39;/var/run/obfs4-state&#39;</span>
+<span class="n">obfs4_args</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;node-id&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+    <span class="s1">&#39;public-key&#39;</span><span class="p">:</span> <span class="o">...</span><span class="p">,</span>
+    <span class="o">...</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">pre_connect_cb</span><span class="p">(</span><span class="n">info</span><span class="p">):</span>
+    <span class="c1"># in pre-connect callback, allow connections from loopback addresses,</span>
+    <span class="c1"># and deny all others</span>
+    <span class="k">if</span> <span class="n">info</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">is_loopback</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">connect_cb</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">info</span><span class="p">):</span>
+    <span class="c1"># this is the main connection callback</span>
+    <span class="o">...</span>
+
+
+<span class="n">adapter</span> <span class="o">=</span> <span class="n">ptadapter</span><span class="o">.</span><span class="n">ExtServerAdapter</span><span class="p">(</span><span class="n">pt_exec</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">connect_cb</span><span class="p">,</span> <span class="n">preconnect_cb</span><span class="o">=</span><span class="n">pre_connect_cb</span><span class="p">)</span>
+<span class="n">adapter</span><span class="o">.</span><span class="n">add_transport</span><span class="p">(</span><span class="s1">&#39;obfs4&#39;</span><span class="p">,</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">7900</span><span class="p">,</span> <span class="n">obfs4_args</span><span class="p">)</span>
+<span class="n">adapter</span><span class="o">.</span><span class="n">add_transport</span><span class="p">(</span><span class="s1">&#39;obfs3&#39;</span><span class="p">,</span> <span class="s1">&#39;127.0.0.1&#39;</span><span class="p">,</span> <span class="mi">7901</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">with</span> <span class="n">adapter</span><span class="p">:</span>
+    <span class="c1"># now the PT is accepting connections</span>
+    <span class="k">await</span> <span class="n">adapter</span><span class="o">.</span><span class="n">wait</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="reference.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="console_script.html" class="btn btn-neutral" title="Console Script Guide" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, twisteroid ambassador
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script type="text/javascript" src="_static/jquery.js"></script>
+        <script type="text/javascript" src="_static/underscore.js"></script>
+        <script type="text/javascript" src="_static/doctools.js"></script>
+    
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
