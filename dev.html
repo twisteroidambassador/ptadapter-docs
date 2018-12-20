@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>ptadapter Developer Guide &mdash; ptadapter 3.0.0rc1 documentation</title>
+  <title>ptadapter Developer Guide &mdash; ptadapter 3.0.0rc2 documentation</title>
   
 
   
@@ -58,7 +58,7 @@
             
             
               <div class="version">
-                3.0.0rc1
+                3.0.0rc2
               </div>
             
           
@@ -167,6 +167,13 @@ controls a PT server, and can be used to receive obfuscated
 connection from a PT client.</p>
 <div class="section" id="common-aspects">
 <h2>Common aspects<a class="headerlink" href="#common-aspects" title="Permalink to this headline">¶</a></h2>
+<p><strong>Note</strong>: Since ptadapter runs the PT as a subprocess, on Windows platforms
+a <a class="reference external" href="https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.ProactorEventLoop" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProactorEventLoop</span></code></a> should be used, instead of the default
+<a class="reference external" href="https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.SelectorEventLoop" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">SelectorEventLoop</span></code></a>.
+To set <a class="reference external" href="https://docs.python.org/3/library/asyncio-eventloop.html#asyncio.ProactorEventLoop" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProactorEventLoop</span></code></a> as default:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">asyncio</span><span class="o">.</span><span class="n">set_event_loop_policy</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">WindowsProactorEventLoopPolicy</span><span class="p">())</span>
+</pre></div>
+</div>
 <p>There are several common arguments when initializing any of the <code class="docutils literal notranslate"><span class="pre">*Adapter</span></code>
 classes:</p>
 <ul class="simple">
